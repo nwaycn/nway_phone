@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.nway.nway_phone.ui.my.MyFragment">
+
+
+    <TextView
+        android:id="@+id/text_my"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="200dp"
+        android:layout_marginEnd="8dp"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:text="@string/app_name"
+        app:layout_constraintTop_toTopOf="parent"
+        app:drawableTopCompat="@mipmap/ic_launcher_nway" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_marginTop="@dimen/xui_dialog_mini_loading_min_size_phone"
+        app:layout_constraintTop_toBottomOf="@+id/text_my"
+        tools:ignore="PrivateResource"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_about"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:textSize="@dimen/xui_actionbar_sub_text_size_tablet_small"
+            android:background="@drawable/top_bottom_border"
+            android:text="@string/about"
+            app:layout_constraintTop_toBottomOf="@+id/text_my"
+            app:drawableRightCompat="@drawable/ic_baseline_keyboard_arrow_right_24" />
+
+        <TextView
+            android:id="@+id/tv_user_agreement"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:textSize="@dimen/xui_actionbar_sub_text_size_tablet_small"
+            android:background="@drawable/top_bottom_border"
+            android:text="@string/user_agreement"
+            app:layout_constraintTop_toBottomOf="@+id/text_my"
+            app:drawableRightCompat="@drawable/ic_baseline_keyboard_arrow_right_24" />
+
+        <TextView
+            android:id="@+id/tv_update"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:textSize="@dimen/xui_actionbar_sub_text_size_tablet_small"
+            android:background="@drawable/top_bottom_border"
+            android:text="@string/update"
+            app:layout_constraintTop_toBottomOf="@+id/text_my"
+            app:drawableRightCompat="@drawable/ic_baseline_keyboard_arrow_right_24" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

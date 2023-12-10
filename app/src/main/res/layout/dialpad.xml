@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <include
+        android:id="@+id/in_display"
+        android:visibility="invisible"
+        layout="@layout/dialpad_display"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dialpad_height"
+        android:layout_alignParentBottom="true"/>
+
+    <com.sample.android.padlayout.PadLayout
+        android:id="@+id/number_pad"
+        style="@style/PadLayoutStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dialpad_height"
+        android:layout_alignParentBottom="true"
+        android:background="#FFF"
+        custom:numColumns="3"
+        custom:numRows="5">
+
+        <com.sample.android.padlayout.DialPadKey
+            android:id="@+id/button1"
+            style="@style/PadButtonStyle.Animation"
+            custom:letterGone="false"
+            custom:numberText="1"
+            />
+
+        <com.sample.android.padlayout.DialPadKey
+            android:id="@+id/button2"
+            style="@style/PadButtonStyle.Animation"
+            custom:letterText="ABC"
+            custom:numberText="2" />
+
+        <com.sample.android.padlayout.DialPadKey
+            android:id="@+id/button3"
+            style="@style/PadButtonStyle.Animation"
+            custom:letterText="DEF"
+            custom:numberText="3" />
+
+        <com.sample.android.padlayout.DialPadKey
+            android:id="@+id/button4"
+            style="@style/PadButtonStyle.Animation"
+            custom:letterText="GHI"
+            custom:numberText="4" />
+
+        <com.sample.android.padlayout.DialPadKey
+            android:id="@+id/button5"
+            style="@style/PadButtonStyle.Animation"
+            custom:letterText="JKL"
+            custom:numberText="5" />
+
+        <com.sample.android.padlayout.DialPadKey
+            android:id="@+id/button6"
+            style="@style/PadButtonStyle.Animation"
+            custom:letterText="MNO"
+            custom:numberText="6" />
+
+        <com.sample.android.padlayout.DialPadKey
+            android:id="@+id/button7"
+            style="@style/PadButtonStyle.Animation"
+            custom:letterText="PQRS"
+            custom:numberText="7" />
+
+        <com.sample.android.padlayout.DialPadKey
+            android:id="@+id/button8"
+            style="@style/PadButtonStyle.Animation"
+            custom:letterText="TUV"
+            custom:numberText="8" />
+
+        <com.sample.android.padlayout.DialPadKey
+            android:id="@+id/button9"
+            style="@style/PadButtonStyle.Animation"
+            custom:letterText="WXYZ"
+            custom:numberText="9" />
+
+        <com.sample.android.padlayout.DialPadKey
+            android:id="@+id/button10"
+            style="@style/PadButtonStyle.Animation"
+            custom:letterGone="false"
+            custom:numberText="*" />
+
+        <com.sample.android.padlayout.DialPadKey
+            android:id="@+id/button11"
+            style="@style/PadButtonStyle.Animation"
+            custom:letterText="+"
+            custom:numberText="0" />
+
+        <com.sample.android.padlayout.DialPadKey
+            android:id="@+id/button12"
+            style="@style/PadButtonStyle.Animation"
+            custom:letterGone="false"
+            custom:numberText="#" />
+
+
+<!--        <View-->
+<!--            style="@style/PadButtonStyle" />-->
+
+        <ImageButton
+            android:id="@+id/phone_setting"
+            android:layout_width="@dimen/call_button_width"
+            android:layout_height="@dimen/call_button_height"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="10dp"
+            style="@style/PadButtonStyle"
+            android:background="@drawable/circle_white"
+            android:padding="10dp"
+            android:src="@drawable/ic_baseline_menu_24"
+            android:scaleType="fitStart"
+            tools:ignore="ContentDescription" />
+
+        <include
+            android:id="@+id/call_button"
+            style="@style/PadButtonStyle"
+            layout="@layout/call_button" />
+
+    </com.sample.android.padlayout.PadLayout>
+
+</RelativeLayout>

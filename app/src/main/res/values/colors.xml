@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!--    <color name="colorPrimary">#299EE3</color>-->
+    <color name="colorPrimary">#50a0f9</color>
+    <color name="colorPrimaryDark">#50a0f9</color>
+    <color name="colorAccent">#50a0f9</color>
+
+    <color name="colorLowOne">#50a0f9</color>
+
+    <color name="match_orange">#FF6A45</color>
+    <color name="match_purple">#B43DE3</color>
+    <color name="match_green">#25DB61</color>
+    <color name="match_yellow">#FBF444</color>
+
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="low_black">#1C1C1C</color>
+    <color name="gray">#666666</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!--透明-->
+    <color name="transparent">#00000000</color>
+    <!--半透明-->
+    <color name="translucent">#22050505</color>
+
+    <color name="xui_config_color_titlebar">#50a0f9</color>
+
+    <color name="dialer_theme_color">@color/color1</color>
+    <color name="dialer_action_pressed">#1735E0</color>
+    <color name="detail_action">#425BEB</color>
+
+    <color name="dialpad_button_default">@android:color/transparent</color>
+    <color name="dialpad_button_pressed">@color/color2</color>
+
+    <color name="display_background_color">#FFFFFF</color>
+    <color name="display_formula_text_color">#8A000000</color>
+
+    <color name="call_button_default">#00cc00</color>
+    <color name="call_button_pressed">#009900</color>
+    <color name="call_button_hangup">#DE4F35</color>
+    <color name="call_button_hangup_pressed">#7B3B10</color>
+</resources>

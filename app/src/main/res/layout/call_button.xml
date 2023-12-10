@@ -1,0 +1,12 @@
+<ImageButton xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/call_button"
+    android:layout_width="@dimen/call_button_width"
+    android:layout_height="@dimen/call_button_height"
+    android:background="@drawable/call_button_selector"
+    android:padding="10dp"
+    android:elevation="5dp"
+    android:src="@drawable/ic_call_white_24dp"
+    android:scaleType="fitCenter"
+    tools:ignore="ContentDescription"
+    tools:targetApi="lollipop" />

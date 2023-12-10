@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/callee"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/xui_guide_btn_margin_bottom_table_small"
+        tools:ignore="PrivateResource"
+        android:textColor="@color/white"
+        android:text="18998380082"
+        android:textAlignment="center"
+        android:layout_marginTop="200dp"/>
+
+    <TextView
+        android:id="@+id/call_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/xui_config_content_spacing_horizontal_tablet_big"
+        android:text="8002 -> 18998380082"
+        android:textColor="@color/white"
+        android:textAlignment="center"/>
+
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/xui_config_content_spacing_horizontal_tablet_big"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:text="正在呼叫"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        android:gravity="bottom"
+        android:layout_marginBottom="@dimen/xui_guide_btn_margin_bottom_table_small"
+        android:orientation="vertical"
+        tools:ignore="PrivateResource">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/speaker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginBottom="@dimen/xui_config_content_spacing_horizontal_phone"
+                android:textColor="@drawable/dialer_action_selector"
+                android:textAlignment="center"
+                android:text="免提" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_weight="1">
+
+                <ImageButton
+                    android:id="@+id/hangup"
+                    android:layout_width="@dimen/call_button_width"
+                    android:layout_height="@dimen/call_button_height"
+                    android:background="@drawable/call_button_hangup"
+                    android:allowClickWhenDisabled="false"
+                    android:padding="10dp"
+                    android:elevation="5dp"
+                    android:src="@drawable/ic_call_white_24dp"
+                    android:scaleType="fitCenter"
+                    tools:ignore="ContentDescription"/>
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/recording"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginBottom="@dimen/xui_config_content_spacing_horizontal_phone"
+                android:textColor="@drawable/dialer_action_selector"
+                android:textAlignment="center"
+                android:text="录音"
+                tools:ignore="RtlCompat" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

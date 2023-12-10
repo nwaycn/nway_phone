@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.nway.nway_phone.ui.call.CallFragment">
+
+    <ScrollView
+        android:id="@+id/screen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <!-- 滚动视图下的唯一元素 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <com.mancj.materialsearchbar.MaterialSearchBar
+                android:id="@+id/search_bar"
+                style="@style/MaterialSearchBarLight"
+                android:background="@drawable/layout_border"
+                app:mt_speechMode="false"
+                app:mt_hint="输入被叫号码"
+                app:mt_maxSuggestionsCount="0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <com.scwang.smart.refresh.layout.SmartRefreshLayout
+                android:id="@+id/refreshLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.scwang.smart.refresh.header.ClassicsHeader
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <!-- 通话记录列表 -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_call_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:overScrollMode="always" />
+
+                <com.scwang.smart.refresh.footer.ClassicsFooter
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
+<!--            <androidx.recyclerview.widget.RecyclerView-->
+<!--                android:id="@+id/recycler_call_history"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="?attr/xui_config_content_spacing_vertical"-->
+<!--                android:overScrollMode="never" />-->
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- 拨号盘 -->
+    <include
+        android:id="@+id/in_dialpad"
+        android:visibility="invisible"
+        layout="@layout/dialpad" />
+
+    <ImageButton
+        android:id="@+id/num_pad_btn"
+        android:layout_width="@dimen/call_button_width"
+        android:layout_height="@dimen/call_button_height"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/circle_blue"
+        android:padding="15dp"
+        android:src="@drawable/ic_dialpad_white_24dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:ignore="ContentDescription" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

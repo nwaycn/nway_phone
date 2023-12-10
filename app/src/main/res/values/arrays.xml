@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="city">
+        <item>丰台区</item>
+        <item>石景山区</item>
+        <item>海淀区</item>
+        <item>漳州市</item>
+        <item>朝阳区</item>
+    </string-array>
+
+    <string-array name="head_menu_title">
+        <item>客户</item>
+        <item>任务</item>
+        <item>统计</item>
+        <item>消息</item>
+    </string-array>
+
+    <array name="head_menu_img">
+        <item>@drawable/ic_customer_white_24</item>
+        <item>@drawable/ic_customer_white_24</item>
+        <item>@drawable/ic_customer_white_24</item>
+        <item>@drawable/ic_customer_white_24</item>
+    </array>
+
+    <string-array name="menu_values">
+        <item>添加</item>
+        <item>修改</item>
+        <item>更新</item>
+        <item>删除</item>
+    </string-array>
+
+</resources>

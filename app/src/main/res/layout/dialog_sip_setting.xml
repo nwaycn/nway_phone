@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RadioGroup
+        android:id="@+id/phone_select"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/fragment_vertical_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="线路选择"/>
+
+        <RadioButton
+            android:id="@+id/local_call"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="本机呼叫"/>
+        <RadioButton
+            android:id="@+id/sip_call"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sip呼叫"/>
+
+    </RadioGroup>
+
+    <LinearLayout
+        android:id="@+id/local_setting_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText
+            android:id="@+id/local_phone_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="本机号"
+            app:met_floatingLabel="normal" />
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/auto_record"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+            android:text="自动录音"
+            app:swb_animationDuration="300"
+            app:swb_thumbMarginBottom="-8dp"
+            app:swb_thumbMarginLeft="-5dp"
+            app:swb_thumbMarginRight="-5dp"
+            app:swb_thumbMarginTop="-2.5dp"
+            app:swb_thumbRangeRatio="1.4" />
+        <com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText
+            android:id="@+id/local_recording_path"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="录音路径"
+            app:met_helperText="一般不需要修改"
+            app:met_helperTextAlwaysShown="true"
+            app:met_floatingLabel="normal" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sip_setting_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:orientation="vertical">
+        <com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText
+            android:id="@+id/extension"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="分机号"
+            app:met_floatingLabel="normal" />
+        <com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="密码"
+            app:met_floatingLabel="normal" />
+        <com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText
+            android:id="@+id/domain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="域"
+            app:met_floatingLabel="normal" />
+        <com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText
+            android:id="@+id/port"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="端口"
+            app:met_floatingLabel="normal" />
+        <com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText
+            android:id="@+id/server"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="代理服务器"
+            app:met_floatingLabel="normal" />
+    </LinearLayout>
+
+
+</LinearLayout>

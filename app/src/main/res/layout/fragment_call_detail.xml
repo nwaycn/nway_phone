@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.nway.nway_phone.ui.call.DetailCallFragment">
+
+    <ScrollView
+        android:id="@+id/screen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/top_bottom_border"
+                android:paddingTop="@dimen/xui_config_simple_list_icon_size_phone"
+                android:paddingBottom="@dimen/xui_config_simple_list_icon_size_phone"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/callee"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/xui_config_simple_list_icon_size_phone"
+                    android:gravity="start"
+                    android:textColor="@color/low_black"
+                    android:text="18102202722"/>
+
+                <ImageButton
+                    android:id="@+id/ib_detail"
+                    android:layout_width="@dimen/detail_call_button_width"
+                    android:layout_height="@dimen/detail_call_button_height"
+                    android:background="@drawable/call_button_selector"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_call_white_24dp"
+                    android:scaleType="fitCenter"
+                    tools:ignore="ContentDescription" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/action_new_customer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/detail_action"
+                android:text="新建客户"/>
+            <TextView
+                android:id="@+id/action_new_contact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/detail_action"
+                android:text="新建联系人"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/xui_config_content_spacing_horizontal_phone"
+                android:layout_marginBottom="@dimen/xui_config_content_spacing_horizontal_phone"
+                android:background="@drawable/top_bottom_border"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/xui_config_content_spacing_horizontal_phone"
+                android:text="通话记录"/>
+
+            <com.scwang.smart.refresh.layout.SmartRefreshLayout
+                android:id="@+id/refreshLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.scwang.smart.refresh.header.ClassicsHeader
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <!-- 通话记录列表 -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_call_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:overScrollMode="always" />
+
+                <com.scwang.smart.refresh.footer.ClassicsFooter
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

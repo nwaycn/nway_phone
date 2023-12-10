@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/display"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/display_background_color">
+
+    <TextView
+        android:id="@+id/formula"
+        style="@style/DisplayEditTextStyle.Formula"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:inputType="text|textNoSuggestions"
+        android:textColor="@color/display_formula_text_color" />
+    <ImageButton
+        android:id="@+id/del_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:paddingTop="24dp"
+        android:paddingEnd="40dp"
+
+        android:src="@drawable/ic_dialpad_delete_22"
+        tools:ignore="RtlSymmetry" />
+
+</RelativeLayout>

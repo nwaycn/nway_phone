@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_call">
+
+
+    <fragment
+        android:id="@+id/navigation_call"
+        android:name="com.nway.nway_phone.ui.call.CallFragment"
+        android:label="@string/title_call"
+        tools:layout="@layout/fragment_call">
+        <action
+            android:id="@+id/action_navigation_call_to_navigation_call_detail"
+            app:enterAnim="@drawable/slide_from_right"
+            app:popExitAnim="@drawable/slide_from_left"
+            app:destination="@id/navigation_call_detail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_call_detail"
+        android:name="com.nway.nway_phone.ui.call.DetailCallFragment"
+        android:label="通话详情"
+        tools:layout="@layout/fragment_call_detail" />
+
+
+    <fragment
+        android:id="@+id/navigation_my"
+        android:name="com.nway.nway_phone.ui.my.MyFragment"
+        android:label="@string/title_my"
+        tools:layout="@layout/fragment_my" >
+        <action
+            android:id="@+id/action_navigation_my_to_navigation_my_detail"
+            app:enterAnim="@drawable/slide_from_right"
+            app:popExitAnim="@drawable/slide_from_left"
+            app:destination="@id/navigation_my_detail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_my_detail"
+        android:name="com.nway.nway_phone.ui.my.DetailMyFragment"
+        android:label="关于详情"
+        tools:layout="@layout/fragment_call_detail" />
+
+</navigation>

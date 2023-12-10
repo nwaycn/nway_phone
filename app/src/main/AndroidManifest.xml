@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
+    <uses-permission android:name="android.permission.WRITE_CALL_LOG" />
+    <uses-permission
+        android:name="android.permission.MODIFY_PHONE_STATE"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- Needed for full screen intent in incoming call notifications -->
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" /> <!-- To vibrate when pressing DTMF keys on numpad & incoming calls -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!--
+ Needed for foreground service
+    (https://developer.android.com/guide/components/foreground-services)
+    -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher_nway"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_nway_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Xui"
+        android:requestLegacyExternalStorage="true"
+        tools:targetApi="31">
+
+        <activity
+            android:name="com.nway.nway_phone.linphone.CallActivity"
+            android:launchMode="singleInstance" />
+        <activity
+            android:name="com.nway.nway_phone.MainActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="true"
+            android:requestLegacyExternalStorage="true"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+
+
+
+    </application>
+
+</manifest>
