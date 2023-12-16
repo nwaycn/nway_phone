@@ -47,7 +47,7 @@ public class MyUtils {
         boolean finalRes = true;
         for (String string : strings) {
             if (ContextCompat.checkSelfPermission(activity, string) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(activity, strings, 1);
+//                ActivityCompat.requestPermissions(activity, strings, 1);
                 finalRes = false;
             }else{
                 Log.e("Permission","有权限"+string);
@@ -161,7 +161,7 @@ public class MyUtils {
     public static String localRecordPath(){
 //        String recordPath = "file:///storage/emulated/0";
         String recordPath = Environment.getExternalStorageDirectory().getAbsolutePath();
-        Log.e(TAG,"手机品牌："+Build.BRAND);
+        Log.e(TAG,"录音路径检查："+Build.BRAND);
         switch (Build.BRAND){
             case "Redmi":
             case "Xiaomi":
@@ -204,7 +204,7 @@ public class MyUtils {
 
     public static boolean checkBrandRecord(Context context){
         String brand = Build.BRAND;
-        Log.e(TAG,"手机品牌："+brand);
+        Log.e(TAG,"录音品牌检查："+brand);
         boolean checkRecord = true;
         switch (Build.BRAND){
             case "Redmi":

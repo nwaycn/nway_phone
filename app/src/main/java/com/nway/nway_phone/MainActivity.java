@@ -6,6 +6,7 @@ import static com.xuexiang.xui.XUI.getContext;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -15,10 +16,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.CallLog;
+import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.navigation.NavController;
@@ -35,7 +38,6 @@ import com.nway.nway_phone.databinding.ActivityMainBinding;
 import com.nway.nway_phone.linphone.CallActivity;
 import com.nway.nway_phone.linphone.PhoneSetting;
 import com.nway.nway_phone.linphone.SipPhone;
-import com.nway.nway_phone.service.PhoneStateReceiver;
 import com.nway.nway_phone.ui.call.CallHistory;
 import com.xuexiang.xui.utils.XToastUtils;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
@@ -46,15 +48,18 @@ import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
 
 @RuntimePermissions
-public class MainActivity extends AppCompatActivity implements AhListener,PhoneStateReceiver.PhoneStateListener {
+public class MainActivity extends AppCompatActivity implements AhListener {
 
     private final static String TAG="MainActivity";
     private ActivityMainBinding binding;
     private String extension;
     private PhoneSetting phoneSetting;
 
-    private PhoneStateReceiver phoneStateReceiver;
     private boolean savingCallLog;
+
+    private String lastCallNumber=null;
+    private String lastCallDate=null;
+    private String currentCallNumber;
 
 //    @BindView(R.id.title_bar)
 
@@ -62,11 +67,9 @@ public class MainActivity extends AppCompatActivity implements AhListener,PhoneS
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        lunchPhoneStateReceiver();
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
 
         TitleBar titleBar = findViewById(R.id.title_bar);
         titleBar.setLeftVisible(true);
@@ -99,26 +102,33 @@ public class MainActivity extends AppCompatActivity implements AhListener,PhoneS
             sp.registerAccount(phoneSetting.extension,phoneSetting.password,phoneSetting.domain,phoneSetting.port,phoneSetting.server);
         }
 
-//        ButterKnife.bind(this);
-
-
-//        BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-//        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-//                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
-//                .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
 //        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-//        getLastLocalCall();
 
     }
 
     @Override
+    protected void onResume() {
+        Log.e(TAG,"MainActivity onResume");
+        super.onResume();
+    }
+
+    @Override
+    protected void onStart() {
+        String[] strings = new String []{
+                Manifest.permission.READ_CALL_LOG};
+        if(MyUtils.hasPermissions(this,strings)){
+            delayToGetLocalCall();
+//            getLastLocalCall();
+        }
+        Log.e(TAG,"MainActivity onStart");
+        super.onStart();
+    }
+
+    @Override
     protected void onDestroy() {
-        unregisterReceiver(phoneStateReceiver);
         super.onDestroy();
     }
 
@@ -196,25 +206,10 @@ public class MainActivity extends AppCompatActivity implements AhListener,PhoneS
         this.phoneSetting = phoneSetting;
     }
 
-//
-//    @Override
-//    public void setCallStatus(String status) {
-//        Log.e("Sip","接收到状态："+status);
-//    }
 
-    public void lunchPhoneStateReceiver(){
-        phoneStateReceiver = new PhoneStateReceiver();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("android.intent.action.PHONE_STATE");
-        Log.e(TAG,"开启电话监听");
-        registerReceiver(phoneStateReceiver,intentFilter);
-        phoneStateReceiver.setPhoneStateListener(this);
-    }
+    private void delayToGetLocalCall(){
 
-    @Override
-    public void onStateChanged(String state) {
-        Log.e(TAG,"收到状态变化："+state);
-        if(state.equals(TelephonyManager.EXTRA_STATE_IDLE) && !savingCallLog){
+        if(currentCallNumber != null && phoneSetting.phoneSelect.equals(LOCAL_CALL) && !savingCallLog){
             savingCallLog = true;
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
@@ -261,6 +256,13 @@ public class MainActivity extends AppCompatActivity implements AhListener,PhoneS
                     vv.setCallee(cursor.getInt(1)==2 ? cursor.getString(0) : extension);
                     vv.setCaller(cursor.getInt(1)==2 ? extension : cursor.getString(0));
                     vv.setCallDate(MyUtils.milliTimestampToDatetime(cursor.getLong(2)));
+
+                    //判断是这个最后一条记录是否已经保存过
+                    if(Objects.equals(lastCallNumber,vv.getCallee()) && Objects.equals(lastCallDate,vv.getCallDate())){
+                        Log.e(TAG,"已经存过的"+lastCallNumber+" "+lastCallDate);
+                        break;
+                    }
+
                     String callDirection = "";
                     if(cursor.getInt(1) == 2){
                         callDirection = "Outgoing";
@@ -306,6 +308,8 @@ public class MainActivity extends AppCompatActivity implements AhListener,PhoneS
                     }
 
                     long row = callLogDatabaseHelper.addCallLog(vv);
+                    lastCallNumber = vv.getCallee();
+                    lastCallDate = vv.getCallDate();
                     Log.e("SipPhone","插入了话单："+row);
                     SipPhone.getInstance().callLogNotify(vv);
                 }
@@ -317,22 +321,43 @@ public class MainActivity extends AppCompatActivity implements AhListener,PhoneS
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     public void readyToCall(String currentNumber){
+        Log.e(TAG,"准备呼叫");
+        this.currentCallNumber = currentNumber;
         if(Objects.equals(phoneSetting.phoneSelect, LOCAL_CALL)){
             if (phoneSetting.autoRecord && !MyUtils.checkBrandRecord(this)){
                 return;
             }
-            String[] strings = new String []{Manifest.permission.CALL_PHONE,
-                    Manifest.permission.READ_PHONE_STATE,
-                    Manifest.permission.READ_CALL_LOG,
-                    Manifest.permission.WRITE_CALL_LOG,
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            String[] strings = new String []{};
+            //安卓10及以下
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q){
+                strings = new String []{Manifest.permission.CALL_PHONE,
+                        Manifest.permission.READ_PHONE_STATE,
+                        Manifest.permission.READ_CALL_LOG,
+                        Manifest.permission.WRITE_CALL_LOG,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            }else{
+                Log.e(TAG,"安卓10以上");
+                //安卓10以上
+                strings = new String []{Manifest.permission.CALL_PHONE,
+                        Manifest.permission.READ_PHONE_STATE,
+                        Manifest.permission.READ_CALL_LOG,
+                        Manifest.permission.WRITE_CALL_LOG,
+//                        Manifest.permission.READ_MEDIA_AUDIO,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            }
             if(MyUtils.hasPermissions(this,strings)){
                 showLocalCall(currentNumber);
             }else{
-                MainActivityPermissionsDispatcher.getRecordPermissionWithPermissionCheck(MainActivity.this);
+                if(!MyUtils.hasPermissions(this, Manifest.permission.CALL_PHONE)){
+                    //有的手机用NeedsPermission无法唤起拨打电话的授权，所以单独请求一下权限
+                    ActivityCompat.requestPermissions(this,new String []{Manifest.permission.CALL_PHONE},1);
+                }
+//                MainActivityPermissionsDispatcher.getRecordPermissionWithPermissionCheck(MainActivity.this);
+                ActivityCompat.requestPermissions(this,strings,1);
             }
         }else if(Objects.equals(phoneSetting.phoneSelect, SIP_CALL)){
             MainActivityPermissionsDispatcher.showSipCallWithPermissionCheck(MainActivity.this,currentNumber);
@@ -356,11 +381,14 @@ public class MainActivity extends AppCompatActivity implements AhListener,PhoneS
         sp.call(getContext(),callee,false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @NeedsPermission({Manifest.permission.CALL_PHONE,
             Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.READ_PHONE_NUMBERS,
             Manifest.permission.READ_CALL_LOG,
             Manifest.permission.WRITE_CALL_LOG,
             Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.READ_MEDIA_AUDIO,
             Manifest.permission.WRITE_EXTERNAL_STORAGE})
     public void getRecordPermission(){
         if(!MyUtils.hasPermissions(this, Manifest.permission.CALL_PHONE)){
