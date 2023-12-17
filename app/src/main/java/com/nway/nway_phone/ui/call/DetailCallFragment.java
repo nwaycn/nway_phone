@@ -3,6 +3,7 @@ package com.nway.nway_phone.ui.call;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -128,6 +129,7 @@ public class DetailCallFragment extends Fragment {
     }
 
     public void playRecording(CallHistory callHistory){
+        Log.e(TAG,"录音路径："+callHistory.getRecordFile());
         LayoutInflater inflater = getLayoutInflater();
         final View layout = inflater.inflate(R.layout.dialog_recording_player,
                 null);

@@ -6,21 +6,33 @@ import static com.xuexiang.xui.XUI.getContext;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Service;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.CallLog;
+import android.provider.Settings;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -41,7 +53,9 @@ import com.nway.nway_phone.linphone.SipPhone;
 import com.nway.nway_phone.ui.call.CallHistory;
 import com.xuexiang.xui.utils.XToastUtils;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
+import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 import permissions.dispatcher.NeedsPermission;
@@ -55,6 +69,13 @@ public class MainActivity extends AppCompatActivity implements AhListener {
     private String extension;
     private PhoneSetting phoneSetting;
 
+    private ActivityResultLauncher<Intent> mBackType;
+    private String[] permissions = new String []{Manifest.permission.CALL_PHONE,
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.READ_CALL_LOG,
+            Manifest.permission.WRITE_CALL_LOG,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE};
     private boolean savingCallLog;
 
     private String lastCallNumber=null;
@@ -106,7 +127,19 @@ public class MainActivity extends AppCompatActivity implements AhListener {
 //        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-
+        mBackType = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    if (Environment.isExternalStorageManager()) {
+                        XToastUtils.toast("已授权文件管理权限");
+                        checkAllPermission();
+                    } else {
+                        XToastUtils.toast("未授权文件管理权限或授权失败！");
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -119,11 +152,14 @@ public class MainActivity extends AppCompatActivity implements AhListener {
     protected void onStart() {
         String[] strings = new String []{
                 Manifest.permission.READ_CALL_LOG};
+
         if(MyUtils.hasPermissions(this,strings)){
             delayToGetLocalCall();
 //            getLastLocalCall();
         }
+
         Log.e(TAG,"MainActivity onStart");
+
         super.onStart();
     }
 
@@ -324,48 +360,76 @@ public class MainActivity extends AppCompatActivity implements AhListener {
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     public void readyToCall(String currentNumber){
-        Log.e(TAG,"准备呼叫");
-        this.currentCallNumber = currentNumber;
         if(Objects.equals(phoneSetting.phoneSelect, LOCAL_CALL)){
-            if (phoneSetting.autoRecord && !MyUtils.checkBrandRecord(this)){
+            if(!MyUtils.hasPermissions(this, Manifest.permission.CALL_PHONE)){
+                //有的手机用NeedsPermission无法唤起拨打电话的授权，所以单独请求一下权限
+                ActivityCompat.requestPermissions(this,new String []{Manifest.permission.CALL_PHONE},1);
                 return;
             }
-            String[] strings = new String []{};
-            //安卓10及以下
-            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q){
-                strings = new String []{Manifest.permission.CALL_PHONE,
-                        Manifest.permission.READ_PHONE_STATE,
-                        Manifest.permission.READ_CALL_LOG,
-                        Manifest.permission.WRITE_CALL_LOG,
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            if (phoneSetting.autoRecord){
+               if(checkManageFilesPermission()){
+                   if(checkAllPermission()){
+                       showLocalCall(currentNumber);
+                   }
+               }
             }else{
-                Log.e(TAG,"安卓10以上");
-                //安卓10以上
-                strings = new String []{Manifest.permission.CALL_PHONE,
-                        Manifest.permission.READ_PHONE_STATE,
-                        Manifest.permission.READ_CALL_LOG,
-                        Manifest.permission.WRITE_CALL_LOG,
-//                        Manifest.permission.READ_MEDIA_AUDIO,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE};
-            }
-            if(MyUtils.hasPermissions(this,strings)){
-                showLocalCall(currentNumber);
-            }else{
-                if(!MyUtils.hasPermissions(this, Manifest.permission.CALL_PHONE)){
-                    //有的手机用NeedsPermission无法唤起拨打电话的授权，所以单独请求一下权限
-                    ActivityCompat.requestPermissions(this,new String []{Manifest.permission.CALL_PHONE},1);
+                if(checkAllPermission()){
+                    showLocalCall(currentNumber);
                 }
-//                MainActivityPermissionsDispatcher.getRecordPermissionWithPermissionCheck(MainActivity.this);
-                ActivityCompat.requestPermissions(this,strings,1);
             }
         }else if(Objects.equals(phoneSetting.phoneSelect, SIP_CALL)){
             MainActivityPermissionsDispatcher.showSipCallWithPermissionCheck(MainActivity.this,currentNumber);
         }
     }
 
+    private boolean checkAllPermission(){
+        if(MyUtils.hasPermissions(this,permissions)){
+            return true;
+        }else{
+            MainActivityPermissionsDispatcher.getRecordPermissionWithPermissionCheck(MainActivity.this);
+        }
+        return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(Objects.equals(permissions[0], Manifest.permission.CALL_PHONE) && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            Log.e(TAG,"拨打电话已授权");
+            checkAllPermission();
+        }
+    }
+
+    private boolean checkManageFilesPermission(){
+        if(!MyUtils.checkBrandRecord(this)){
+            return false;
+        }
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.R || Environment.isExternalStorageManager()) {
+            Log.e(TAG,"已有文件存储管理权限");
+            return true;
+        } else {
+            new MaterialDialog.Builder(this)
+                    .content("请在接下来的页面授权所有文件的管理权限，否则通话录音无法正常使用！")
+                    .positiveText("确定")
+                    .onPositive((dialog, which) -> {
+//                        Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+//                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                        intent.setData(Uri.parse("package:" + getPackageName()));
+//                        startActivity(intent);
+                        mBackType.launch(intent);
+                    })
+                    .negativeText("取消")
+                    .show();
+        }
+        return false;
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @NeedsPermission({Manifest.permission.RECORD_AUDIO,
             Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.READ_MEDIA_AUDIO,
             Manifest.permission.MODIFY_AUDIO_SETTINGS})
     public void showSipCall(String callee){
         SipPhone sp = SipPhone.getInstance();
@@ -388,7 +452,7 @@ public class MainActivity extends AppCompatActivity implements AhListener {
             Manifest.permission.READ_CALL_LOG,
             Manifest.permission.WRITE_CALL_LOG,
             Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.READ_MEDIA_AUDIO,
+//            Manifest.permission.READ_MEDIA_AUDIO,
             Manifest.permission.WRITE_EXTERNAL_STORAGE})
     public void getRecordPermission(){
         if(!MyUtils.hasPermissions(this, Manifest.permission.CALL_PHONE)){
@@ -398,6 +462,7 @@ public class MainActivity extends AppCompatActivity implements AhListener {
         Log.e(TAG,"获取权限");
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     public void showLocalCall(String callee){
         String[] strings = new String []{Manifest.permission.CALL_PHONE,
                 Manifest.permission.READ_PHONE_STATE,
@@ -407,6 +472,7 @@ public class MainActivity extends AppCompatActivity implements AhListener {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
 
+        this.currentCallNumber = callee;
         ActivityCompat.requestPermissions(this,strings,1);
         Intent intent = new Intent(Intent.ACTION_CALL);
         Uri data = Uri.parse("tel:" + callee);

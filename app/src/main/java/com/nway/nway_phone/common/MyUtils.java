@@ -4,13 +4,16 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 
@@ -137,14 +140,11 @@ public class MyUtils {
             Log.e(TAG,"路径："+localRecordPath+" "+"不存在");
             return "";
         }
-        File[] files = filePath.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return (name.contains(phone) && name.contains(getDateTimeWithOutSecond(callDate)));
+        File[] files = filePath.listFiles((dir, name) -> {
+            return (name.contains(phone) && name.contains(getDateTimeWithOutSecond(callDate)));
 //                return (name.contains(phone) && name.contains("20231126"));
-            }
         });
-        if(files == null){
+        if(files == null || files.length == 0){
             Log.e(TAG,"录音路径："+localRecordPath+" "+"listFiles没有文件");
             return "";
         }
@@ -204,6 +204,7 @@ public class MyUtils {
 
     public static boolean checkBrandRecord(Context context){
         String brand = Build.BRAND;
+//        findTheKey(context);
         Log.e(TAG,"录音品牌检查："+brand);
         boolean checkRecord = true;
         switch (Build.BRAND){
@@ -238,6 +239,7 @@ public class MyUtils {
     }
 
     public static boolean checkXiaomiRecord(Context context){
+//        findTheKey(context);
         try {
             int key = Settings.System.getInt(context.getContentResolver(), "button_auto_record_call");
             Log.d(TAG, "Xiaomi key:" + key);
@@ -246,7 +248,7 @@ public class MyUtils {
         } catch (Settings.SettingNotFoundException e) {
             e.printStackTrace();
         }
-        return true;
+        return false;
     }
     public static boolean checkOppoRecord(Context context){
         try {
@@ -257,7 +259,7 @@ public class MyUtils {
         } catch (Settings.SettingNotFoundException e) {
             e.printStackTrace();
         }
-        return true;
+        return false;
     }
     public static boolean checkVivoRecord(Context context){
         try {
@@ -268,7 +270,7 @@ public class MyUtils {
         } catch (Settings.SettingNotFoundException e) {
             e.printStackTrace();
         }
-        return true;
+        return false;
     }
     public static boolean checkHuaweiRecord(Context context){
         try {
@@ -279,7 +281,7 @@ public class MyUtils {
         } catch (Settings.SettingNotFoundException e) {
             e.printStackTrace();
         }
-        return true;
+        return false;
     }
 
     public static void findTheKey(Context context){
