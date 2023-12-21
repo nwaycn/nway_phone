@@ -9,6 +9,15 @@
 #nway_phone介绍
 
 ![nway_phone截图](./nway_phone.jpg)
+![image](https://github.com/nwaycn/nway_phone/assets/10083564/599de26f-fd19-4795-8395-cdca1e3f92fe)
+![image](https://github.com/nwaycn/nway_phone/assets/10083564/20b40233-1002-4df2-a225-b4b2ae1229e1)
+![image](https://github.com/nwaycn/nway_phone/assets/10083564/5e31c71d-e9e7-436f-9c5f-4342e66e948f)
+![image](https://github.com/nwaycn/nway_phone/assets/10083564/55cf33af-a5d2-495b-a5db-aae7f47b612a)
+![image](https://github.com/nwaycn/nway_phone/assets/10083564/09969de0-683e-4d76-b15d-0a7398d9a132)
+
+
+
+
 
 - nway_phone是一款安卓端sip软电话客户端。作为一个android softphone sip client,支持sip账号的注册，解注册，发起呼叫，录音等功能。
 - nway_phone同时可以支持本机号码呼叫，封装了大部分主流机型的电话事件监听，以及自动录音的判断和录音文件路径的获取。
